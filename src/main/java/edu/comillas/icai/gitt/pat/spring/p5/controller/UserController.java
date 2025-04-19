@@ -1,6 +1,6 @@
 package edu.comillas.icai.gitt.pat.spring.p5.controller;
 
-//import edu.comillas.icai.gitt.pat.spring.p5.entity.AppUser;
+import edu.comillas.icai.gitt.pat.spring.p5.entity.AppUser;
 import edu.comillas.icai.gitt.pat.spring.p5.entity.Token;
 import edu.comillas.icai.gitt.pat.spring.p5.model.LoginRequest;
 import edu.comillas.icai.gitt.pat.spring.p5.model.ProfileRequest;
