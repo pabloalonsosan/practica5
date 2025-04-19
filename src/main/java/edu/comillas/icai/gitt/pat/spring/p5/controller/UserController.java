@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class UserController {
+//public class UserController {
     @Autowired UserServiceInterface userService;
 
     @PostMapping("/api/users")
