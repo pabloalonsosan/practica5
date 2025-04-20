@@ -53,12 +53,22 @@ class UserControllerIntegrationTest {
      * que se debe devolver cuando se intenta registrar con un password inseguro
      * (no cumple condiciones)
      */
-    @Test void registerInvalidPassword() throws Exception {
-        // Given ...
+    @Test
+    void registerInvalidPassword() throws Exception {
+        // Given: JSON con contraseña inválida (no cumple requisitos mínimos)
+        String badRequest = "{" +
+                "\"name\":\"" + NAME + "\"," +
+                "\"email\":\"" + EMAIL + "\"," +
+                "\"role\":\"" + Role.USER + "\"," +
+                "\"password\":\"123\"}"; // inseguro: demasiado corto, sin mayúsculas, etc.
 
-        // When ...
-
-                // Then ...
+        // When + Then: esperamos un 400 Bad Request
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.post("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(badRequest))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 
     }
 }

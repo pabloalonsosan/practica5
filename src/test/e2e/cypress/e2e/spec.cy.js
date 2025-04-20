@@ -23,6 +23,20 @@ describe('Registro y login', () => {
   // verificar que se realiza el login correctamente con el usuario
   // previamente registrado
   it('Login correcto', () => {
+    cy.visit('http://localhost:8080/login.html')
 
+    // Escribir email y contraseña
+    cy.get('[name="email"]').type(email)
+    cy.get('[name="email"]').should('have.value', email)
+    cy.get('[name="password"]').type(pass)
+    cy.get('[name="password"]').should('have.value', pass)
+
+    // Hacer clic en el botón de login
+    cy.contains('Entrar').click()
+
+    // Comprobar redirección al perfil y contenido
+    cy.url().should('include', '/perfil.html')
+    cy.contains(name) // El nombre del usuario debería estar visible en la página de perfil
   })
+
 })

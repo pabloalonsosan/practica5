@@ -56,13 +56,41 @@ class P5ApplicationE2ETest {
      * Completa el siguiente test E2E para que verifique la
      * respuesta de login cuando se proporcionan credenciales correctas
      */
-    @Test public void loginOkTest() {
-        // Given ...
+    @Test
+    public void loginOkTest() {
+        // Given: registrar al usuario
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String registro = "{" +
+                "\"name\":\"" + NAME + "\"," +
+                "\"email\":\"" + EMAIL + "\"," +
+                "\"role\":\"" + Role.USER + "\"," +
+                "\"password\":\"" + PASS + "\"}";
 
-        // When ...
+        client.exchange(
+                "http://localhost:8080/api/users",
+                HttpMethod.POST,
+                new HttpEntity<>(registro, headers),
+                String.class);
 
+        // Now: preparar login con credenciales correctas
+        String login = "{" +
+                "\"email\":\"" + EMAIL + "\"," +
+                "\"password\":\"" + PASS + "\"}";
 
-        // Then ...
+        // When: realizar login
+        ResponseEntity<String> response = client.exchange(
+                "http://localhost:8080/api/users/me/session",
+                HttpMethod.POST,
+                new HttpEntity<>(login, headers),
+                String.class);
 
+        // Then: debe responder con 201 y contener una cookie de sesión
+        Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
+        String setCookieHeader = response.getHeaders().getFirst(HttpHeaders.SET_COOKIE);
+        Assertions.assertNotNull(setCookieHeader);
+        Assertions.assertTrue(setCookieHeader.contains("session"));
     }
+
 }

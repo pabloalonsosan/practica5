@@ -20,29 +20,58 @@ class RepositoryIntegrationTest {
      * los datos correctamente, y las consultas por AppToken y por email
      * definidas respectivamente en ellos retornan el token y usuario guardados.
      */
-    @Test void saveTest() {
-        // Given ...
+    @Test
+    void saveTest() {
+        // Given
         AppUser user = new AppUser();
+        user.setEmail("test@email.com");
+        user.setPassword("hashed123");
+        user.setName("Test User");
+        user.setRole(Role.USER);
+        AppUser savedUser = appUserRepository.save(user);
+
         Token token = new Token();
+        token.setAppUser(savedUser);
+        Token savedToken = tokenRepository.save(token);
 
-        // When ...
+        // When
+        AppUser foundUser = appUserRepository.findByEmail("test@email.com").orElse(null);
+        Token foundToken = tokenRepository.findByAppUser(savedUser).orElse(null);
 
-        // Then ...
+        // Then
+        Assertions.assertNotNull(foundUser);
+        Assertions.assertEquals(savedUser.getEmail(), foundUser.getEmail());
 
+        Assertions.assertNotNull(foundToken);
+        Assertions.assertEquals(savedUser.getId(), foundToken.getAppUser().getId());
     }
+
 
     /**
      * TODO#10
      * Completa este test de integración para que verifique que
      * cuando se borra un usuario, automáticamente se borran sus tokens asociados.
      */
-    @Test void deleteCascadeTest() {
-        // Given ...
+    @Test
+    void deleteCascadeTest() {
+        // Given
+        AppUser user = new AppUser();
+        user.setEmail("test2@email.com");
+        user.setPassword("pass");
+        user.setName("User 2");
+        user.setRole(Role.USER);
+        user = appUserRepository.save(user);
 
-        // When ...
+        Token token = new Token();
+        token.setAppUser(user);
+        tokenRepository.save(token);
 
-        // Then ...
+        // When
+        appUserRepository.delete(user);
+
+        // Then
         Assertions.assertEquals(0, appUserRepository.count());
-
+        Assertions.assertEquals(0, tokenRepository.count());
     }
+
 }

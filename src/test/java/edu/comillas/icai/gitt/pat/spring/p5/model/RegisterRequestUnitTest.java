@@ -36,5 +36,23 @@ class RegisterRequestUnitTest {
         assertTrue(violations.isEmpty());
     }
 
+    @Test
+    public void testInvalidEmail() {
+        RegisterRequest registro = new RegisterRequest(
+                "Nombre", "email_sin_arroba", Role.USER, "aaaaaaA1");
+
+        Set<ConstraintViolation<RegisterRequest>> violations = validator.validate(registro);
+        assertTrue(!violations.isEmpty());
+    }
+
+    @Test
+    public void testShortPassword() {
+        RegisterRequest registro = new RegisterRequest(
+                "Nombre", "nombre@email.com", Role.USER, "aA1");
+
+        Set<ConstraintViolation<RegisterRequest>> violations = validator.validate(registro);
+        assertTrue(!violations.isEmpty());
+    }
+
 
 }
