@@ -3,7 +3,7 @@ package edu.comillas.icai.gitt.pat.spring.p5.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.persistence.OneToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -18,6 +18,30 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class Token {
-    @Id @GeneratedValue(strategy = GenerationType.UUID) public String id;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    public String id;
+
+    @OneToOne
+    @JoinColumn(name = "app_user_id", nullable = false, unique = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private AppUser appUser;
+
+    // Getters y setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
 }

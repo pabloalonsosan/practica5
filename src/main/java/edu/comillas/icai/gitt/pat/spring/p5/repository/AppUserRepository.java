@@ -10,6 +10,8 @@ import org.springframework.data.repository.CrudRepository;
  * a un email dado
  */
 
-public interface AppUserRepository extends CrudRepository<AppUser, Long> {
+import java.util.Optional;
 
+public interface AppUserRepository extends CrudRepository<AppUser, Long> {
+    Optional<AppUser> findByEmail(String email);
 }

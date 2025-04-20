@@ -11,6 +11,8 @@ import org.springframework.data.repository.CrudRepository;
  * a un AppUser dado
  */
 
-public interface TokenRepository extends CrudRepository<Token, String> {
+import java.util.Optional;
 
+public interface TokenRepository extends CrudRepository<Token, String> {
+    Optional<Token> findByAppUser(AppUser appUser);
 }
